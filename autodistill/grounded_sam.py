@@ -2,12 +2,16 @@
 # code from https://blog.roboflow.com/autodistill/
 # code from https://colab.research.google.com/github/roboflow-ai/notebooks/blob/main/notebooks/how-to-auto-train-yolov8-model-with-autodistill.ipynb
 # cuda getting started from - https://pytorch.org/get-started/locally/
-# pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+# pip install roboflow autodistill autodistill-grounded-sam autodistil-yolov8 autodistill-grounding-dino
 # tested with CUDA 12.1 - nvidia-smi
 
+from autodistill_grounding_dino import GroundingDINO
 from autodistill.detection import CaptionOntology
 from autodistill_grounded_sam import GroundedSAM
 import supervision as sv
+import os
+import shutil
 import torch
 
 # Check if CUDA is available
@@ -21,12 +25,15 @@ IMAGE_DIR_PATH = "./data/input_from_video"
 YOLO_DATASET_DIR_PATH = "./data/yolo_dataset"
 
 ontology = CaptionOntology({
-    "blue square": "wow_raid_marker_square",
-    "orange circle": "wow_raid_marker_circle",
-    "pruple diamond": "wow_raid_marker_diamond",
+    "the single blue square": "wow_raid_marker_square",
+    "the single orange circle": "wow_raid_marker_circle",
+    "the single purple diamond": "wow_raid_marker_diamond",
 })
 
-base_model = GroundedSAM(ontology=ontology)
+base_model = GroundingDINO(ontology=ontology)
+if os.path.exists(YOLO_DATASET_DIR_PATH):
+    shutil.rmtree(YOLO_DATASET_DIR_PATH)
+
 dataset = base_model.label(
     input_folder=IMAGE_DIR_PATH,
     extension=".png",
