@@ -16,13 +16,12 @@ video_paths = sv.list_files_with_extensions(
 )
 
 VIDEO_COUNT = int(len(video_paths) / 2)
-TEST_VIDEO_PATHS, TRAIN_VIDEO_PATHS = video_paths[:VIDEO_COUNT], video_paths[VIDEO_COUNT:]
+# TEST_VIDEO_PATHS, TRAIN_VIDEO_PATHS = video_paths[:VIDEO_COUNT], video_paths[VIDEO_COUNT:]
+total_videos = len(video_paths)
 
-# Logging progress manually
-total_videos = len(TRAIN_VIDEO_PATHS)
 print(f"Processing {total_videos} videos...")
 
-for index, video_path in enumerate(TRAIN_VIDEO_PATHS):
+for index, video_path in enumerate(video_paths):
     print(f"Processing video {index + 1}/{total_videos}: {video_path}")
     video_name = os.path.splitext(os.path.basename(video_path))[0]
     image_name_pattern = video_name + "-{:05d}.png"
